@@ -4,7 +4,7 @@ import mediapipe as mp
 from pynput.keyboard import Controller
 
 # Initialize MediaPipe Hands and Keyboard Controller
-mp_hands = mp.solutions.hands.Hands()
+mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 keyboard = Controller()
 
 # Open the webcam
@@ -41,11 +41,9 @@ while True:
 
             # Assign specific landmarks to variables - Refer to mediapipe documentation
             if id == 3: # 3 is the landmark id for the ip of the thumb
-                x3 = x
-                y3 = y
+                x3, y3 = x, y
             if id == 5: # 5 is the landmark id for the bottom of the index finger
-                x4 = x
-                y4 = y
+                x4, y4 = x, y
             if id == 12: # 12 is the landmark id for the tip of the middle finger
                 x1, y1 = x, y
             if id == 0: # 0 is the landmark id for the Wrist
@@ -56,6 +54,7 @@ while True:
         distY = y1 - y2
         distNx = x3 - x4 # Calculate distance between additional landmarks which is used for nitro
         distNy = y3 - y4
+        
         # Hand gesture controls
         # Backward
         if distY > -140 and distY != 0:
@@ -74,7 +73,7 @@ while True:
             keyboard.press('n')
             print("N") 
 
-        # Front
+        # Forward
         if distY < -200 and distY != 0:
             keyboard.release('s')
             keyboard.release('n')
@@ -108,10 +107,11 @@ while True:
         keyboard.release('w')
         keyboard.release('s')
         keyboard.release('n')
-
-    # Wait for 'x' key to exit the loop
-    x = cv2.waitKey(1)
-    if x == ord("x"):
+    cv2.imshow("Frame", image)
+    
+    # Wait for 'z' key to exit the loop
+    z = cv2.waitKey(1)
+    if z == ord("z"):
         break
 
 # Release the webcam and close OpenCV windows
