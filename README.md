@@ -20,7 +20,7 @@ pip install -r requirements.txt
 
 - Run `afk.py`
 
-And put your hand in front of the Camera!
+And then held your palm in front of the Camera!
 
 
 ## License
